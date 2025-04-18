@@ -77,33 +77,33 @@ while not game_over:
     for event in pygame.event.get():
         if event.type == pygame.QUIT:
             sys.exit()
+        if event.type == pygame.MOUSEBUTTONDOWN:
+            print("")
+            """#demander au joueur 1 input
+            if turn == 0:
+                col = int(input("J1 fait ton choix (0-6):"))
+                turn = 1
 
-    #demander au joueur 1 input
-    if turn == 0:
-        col = int(input("J1 fait ton choix (0-6):"))
-        turn = 1
+                if is_valid_location(board, col):
+                    row = get_next_open_row(board, col)
+                    drop_piece(board, row, col, 1)
 
-        if is_valid_location(board, col):
-            row = get_next_open_row(board, col)
-            drop_piece(board, row, col, 1)
+                    if winning_move(board, 1):
+                        print("Joueur 1 a gagné !!!")
+                        game_over = True
+            #dmd au joueur 2
+            else:
+                col = int(input("J2 fait ton choix (0-6):"))
+                turn = 0
 
-            if winning_move(board, 1):
-                print("Joueur 1 a gagné !!!")
-                game_over = True
-    #dmd au joueur 2
-    else:
-        col = int(input("J2 fait ton choix (0-6):"))
-        turn = 0
+                if is_valid_location(board, col):
+                    row = get_next_open_row(board, col)
+                    drop_piece(board, row, col, 2)
 
-        if is_valid_location(board, col):
-            row = get_next_open_row(board, col)
-            drop_piece(board, row, col, 2)
-
-            if winning_move(board, 2):
-                print("Joueur 2 a gagné !!!")
-                game_over = True
-            
-
-    print_board(board)
-
+                    if winning_move(board, 2):
+                        print("Joueur 2 a gagné !!!")
+                        game_over = True
+                    
+            print_board(board)
+"""
 
