@@ -2,6 +2,10 @@ import numpy as np
 import pygame 
 import sys
 
+BLEU = (30, 127, 203)
+NOIR = (0, 0, 0)
+
+
 ROW_COUNT = 6
 COLUMN_COUNT = 7
 
@@ -52,8 +56,10 @@ def winning_move(board, piece):
                 return True
 #def animation p4         
 def draw_board(board):
-    pass
-
+    for c in range(COLUMN_COUNT):
+        for i in range(ROW_COUNT):
+            pygame.draw.rect(screen, BLEU, (c*TAILLECARRE, i*TAILLECARRE+TAILLECARRE, TAILLECARRE, TAILLECARRE))
+            pygame.draw.circle(screen, NOIR, (int(c*TAILLECARRE+TAILLECARRE/2), int(i*TAILLECARRE+TAILLECARRE+TAILLECARRE/2)), rayon ) #/2 car rayon
 
 board = create_board()
 print_board(board)
@@ -62,24 +68,29 @@ game_over = False
 #chacun son tour
 turn = 0
 
-pygame.init()
+#pygame.init()
 
 TAILLECARRE = 100 #une case dans le jeu
 
 largeur = TAILLECARRE*COLUMN_COUNT
-hauteur = TAILLECARRE*ROW_COUNT+1 #multiplie le carré par le nombre de lignes +1 car animation en haut
+hauteur = TAILLECARRE*(ROW_COUNT+1) #multiplie le carré par le nombre de lignes +1 car animation en haut
 
 taille = (largeur, hauteur)
+rayon = int(TAILLECARRE/2 - 5)
 
 screen = pygame.display.set_mode(taille)
+draw_board(board)
+pygame.display.update()
 
 while not game_over:
+    
     for event in pygame.event.get():
         if event.type == pygame.QUIT:
             sys.exit()
         if event.type == pygame.MOUSEBUTTONDOWN:
-            print("")
-            """#demander au joueur 1 input
+            continue
+            """
+                    #demander au joueur 1 input
             if turn == 0:
                 col = int(input("J1 fait ton choix (0-6):"))
                 turn = 1
@@ -103,7 +114,7 @@ while not game_over:
                     if winning_move(board, 2):
                         print("Joueur 2 a gagné !!!")
                         game_over = True
-                    
-            print_board(board)
+                            
+        print_board(board)
 """
 
