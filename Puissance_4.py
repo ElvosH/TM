@@ -1,9 +1,13 @@
 import numpy as np 
 import pygame 
 import sys
+import math
 
 BLEU = (30, 127, 203)
 NOIR = (0, 0, 0)
+JAUNE = (255, 227, 34)
+ROUGE = (237, 0, 0)
+VERT = (22, 184, 78)
 
 
 ROW_COUNT = 6
@@ -59,10 +63,24 @@ def draw_board(board):
     for c in range(COLUMN_COUNT):
         for i in range(ROW_COUNT):
             pygame.draw.rect(screen, BLEU, (c*TAILLECARRE, i*TAILLECARRE+TAILLECARRE, TAILLECARRE, TAILLECARRE))
-            pygame.draw.circle(screen, NOIR, (int(c*TAILLECARRE+TAILLECARRE/2), int(i*TAILLECARRE+TAILLECARRE+TAILLECARRE/2)), rayon ) #/2 car rayon
+            pygame.draw.circle(screen, NOIR, (int(c*TAILLECARRE+TAILLECARRE/2), int(i*TAILLECARRE+TAILLECARRE+TAILLECARRE/2)), rayon ) #/2 car rayon, int cause pygame str
+        
+    for c in range(COLUMN_COUNT):
+        for i in range(ROW_COUNT):
+            if board[i][c] == 1:
+                pygame.draw.circle(screen, JAUNE, (int(c*TAILLECARRE+TAILLECARRE/2), hauteur-int(i*TAILLECARRE+TAILLECARRE/2)), rayon )
+            elif board[i][c] == 2:
+                pygame.draw.circle(screen, ROUGE, (int(c*TAILLECARRE+TAILLECARRE/2), hauteur-int(i*TAILLECARRE+TAILLECARRE/2)), rayon )
+            
+    pygame.display.update()
+            
+
+
+
 
 board = create_board()
 print_board(board)
+
 #quand la valeur est True le jeu stop
 game_over = False
 #chacun son tour
@@ -80,19 +98,34 @@ rayon = int(TAILLECARRE/2 - 5)
 
 screen = pygame.display.set_mode(taille)
 draw_board(board)
-pygame.display.update()
+pygame.display.update() #rafraichir le dessin 
+
+pygame.font.init()
+
+texte = pygame.font.SysFont("monospace", 60)
 
 while not game_over:
     
     for event in pygame.event.get():
         if event.type == pygame.QUIT:
             sys.exit()
+
+        if event.type == pygame.MOUSEMOTION: #animation piece presélection
+            pygame.draw.rect(screen, NOIR, (0,0, largeur, TAILLECARRE)) #dessine noir en continue dans le plan arrière 
+            posx = event.pos[0]
+            if turn == 0:
+                pygame.draw.circle(screen, JAUNE, (posx, int(TAILLECARRE/2)), rayon)
+            else:
+                pygame.draw.circle(screen, ROUGE, (posx, int(TAILLECARRE/2)), rayon)
+        pygame.display.update()
+
         if event.type == pygame.MOUSEBUTTONDOWN:
-            continue
-            """
+            #print(event.pos)
+            pygame.draw.rect(screen, NOIR, (0,0, largeur, TAILLECARRE))
                     #demander au joueur 1 input
             if turn == 0:
-                col = int(input("J1 fait ton choix (0-6):"))
+                posx = event.pos[0]
+                col = int(math.floor(posx/TAILLECARRE)) #/100 pour range entre 0-7 (simplifie 0-700), floor = plus grand entier -=x
                 turn = 1
 
                 if is_valid_location(board, col):
@@ -100,11 +133,13 @@ while not game_over:
                     drop_piece(board, row, col, 1)
 
                     if winning_move(board, 1):
-                        print("Joueur 1 a gagné !!!")
+                        etiquette = texte.render("Joueur 1 a gagné !!", 1 , VERT)
+                        screen.blit(etiquette, (12,15))
                         game_over = True
             #dmd au joueur 2
             else:
-                col = int(input("J2 fait ton choix (0-6):"))
+                posx = event.pos[0]
+                col = int(math.floor(posx/TAILLECARRE))
                 turn = 0
 
                 if is_valid_location(board, col):
@@ -112,9 +147,15 @@ while not game_over:
                     drop_piece(board, row, col, 2)
 
                     if winning_move(board, 2):
-                        print("Joueur 2 a gagné !!!")
+                        etiquette = texte.render("Joueur 2 a gagné !!", 1 , VERT)
+                        screen.blit(etiquette, (12,15))
                         game_over = True
                             
         print_board(board)
-"""
+        draw_board(board)
 
+        if game_over:
+            pygame.time.wait(3000) #millisec
+
+
+ 
