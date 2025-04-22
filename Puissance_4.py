@@ -57,7 +57,11 @@ def winning_move(board, piece):
     for c in range(COLUMN_COUNT-3):
         for i in range(3, ROW_COUNT):
             if board[i][c] == piece and board[i-1][c+1] == piece and board[i-2][c+2] == piece and board[i-3][c+3] == piece: #descend de ligne, avance en colone [i-1]
-                return True
+                return True                         
+
+def egalite(board, col):
+    return board[ROW_COUNT-1][col] != 0
+
 #def animation p4         
 def draw_board(board):
     for c in range(COLUMN_COUNT):
@@ -135,7 +139,13 @@ while not game_over:
                     if winning_move(board, 1):
                         etiquette = texte.render("Joueur 1 a gagné !!", 1 , VERT)
                         screen.blit(etiquette, (12,15))
-                        game_over = True
+                        game_over = True 
+
+                else:
+                    etiquette = texte.render("égalité !!", 1, VERT)
+                    screen.blit(etiquette, (175,15))
+                    game_over = True 
+
             #dmd au joueur 2
             else:
                 posx = event.pos[0]
@@ -144,18 +154,23 @@ while not game_over:
 
                 if is_valid_location(board, col):
                     row = get_next_open_row(board, col)
-                    drop_piece(board, row, col, 2)
+                    drop_piece(board, row, col, 2)           
 
                     if winning_move(board, 2):
                         etiquette = texte.render("Joueur 2 a gagné !!", 1 , VERT)
                         screen.blit(etiquette, (12,15))
                         game_over = True
-                            
-        print_board(board)
+                
+                else:
+                    etiquette = texte.render("égalité !!", 1, VERT)
+                    screen.blit(etiquette, (175,15))
+                    game_over = True
+
+            print_board(board)
         draw_board(board)
 
         if game_over:
-            pygame.time.wait(3000) #millisec
+           pygame.time.wait(3000) #millisec
 
 
  
