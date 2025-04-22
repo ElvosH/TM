@@ -151,7 +151,7 @@ while not game_over:
                         screen.blit(etiquette, (12,15))
                         game_over = True
                             
-        print_board(board)
+            print_board(board)
         draw_board(board)
 
         if game_over:
