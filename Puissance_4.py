@@ -59,9 +59,6 @@ def winning_move(board, piece):
             if board[i][c] == piece and board[i-1][c+1] == piece and board[i-2][c+2] == piece and board[i-3][c+3] == piece: #descend de ligne, avance en colone [i-1]
                 return True                         
 
-def egalite(board, col):
-    return board[ROW_COUNT-1][col] != 0
-
 #def animation p4         
 def draw_board(board):
     for c in range(COLUMN_COUNT):
