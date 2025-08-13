@@ -23,6 +23,7 @@ screen = pygame.display.set_mode(taille)
 rayon = int(TAILLECARRE/2 - 5)
 texte = pygame.font.SysFont("monospace", 60)
 <<<<<<< HEAD
+<<<<<<< HEAD
 taille_menu = (900, 700) #taille de l'écran de menu
 screen_menu = pygame.display.set_mode(taille_menu) #écran de menu, 100x200 pixels
 =======
@@ -32,6 +33,11 @@ taille_menu = (900, 700) #taille de l'écran de menu
 screen_menu = pygame.display.set_mode(taille_menu) #écran de menu, 100x200 pixels
 >>>>>>> 08d8df9 (boutons + menu (dossier smartAI = projet))
 >>>>>>> d4b502f (bouton + menu)
+=======
+taille_menu = (900, 700) #taille de l'écran de menu
+screen_menu = pygame.display.set_mode(taille_menu) #écran de menu, 100x200 pixels
+
+>>>>>>> 62f7151 (menu amélioré)
 
 def create_board():
     """ créer une matrice 6x7"""
@@ -263,6 +269,7 @@ def ecran_jeu():
                 pygame.time.wait(2000) #millisec
 
 <<<<<<< HEAD
+<<<<<<< HEAD
 #charger les images (boutons)
 image_start = pygame.image.load("pngtree-the-apple-green-start-png-image_2255519.png").convert_alpha()
 image_exit = pygame.image.load("exit-button.png").convert_alpha()
@@ -328,6 +335,8 @@ ecran_menu()
 =======
 ecran_menu()
 =======
+=======
+>>>>>>> 62f7151 (menu amélioré)
 #charger les images (boutons)
 image_start = pygame.image.load("pngtree-the-apple-green-start-png-image_2255519.png").convert_alpha()
 image_exit = pygame.image.load("exit-button.png").convert_alpha()
@@ -386,5 +395,9 @@ def ecran_menu():
 
 
 ecran_menu()
+<<<<<<< HEAD
 >>>>>>> 08d8df9 (boutons + menu (dossier smartAI = projet))
 >>>>>>> d4b502f (bouton + menu)
+=======
+
+>>>>>>> 62f7151 (menu amélioré)
