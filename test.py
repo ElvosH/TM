@@ -22,8 +22,16 @@ taille = (largeur, hauteur)
 screen = pygame.display.set_mode(taille)
 rayon = int(TAILLECARRE/2 - 5)
 texte = pygame.font.SysFont("monospace", 60)
+<<<<<<< HEAD
 taille_menu = (900, 700) #taille de l'écran de menu
 screen_menu = pygame.display.set_mode(taille_menu) #écran de menu, 100x200 pixels
+=======
+<<<<<<< HEAD
+=======
+taille_menu = (900, 700) #taille de l'écran de menu
+screen_menu = pygame.display.set_mode(taille_menu) #écran de menu, 100x200 pixels
+>>>>>>> 08d8df9 (boutons + menu (dossier smartAI = projet))
+>>>>>>> d4b502f (bouton + menu)
 
 def create_board():
     """ créer une matrice 6x7"""
@@ -254,6 +262,72 @@ def ecran_jeu():
             if game_over:
                 pygame.time.wait(2000) #millisec
 
+<<<<<<< HEAD
+#charger les images (boutons)
+image_start = pygame.image.load("pngtree-the-apple-green-start-png-image_2255519.png").convert_alpha()
+image_exit = pygame.image.load("exit-button.png").convert_alpha()
+
+class Bouton:
+    """classe pour les boutons"""
+    def __init__(self, x, y, image, scale):
+        width = image.get_width()
+        height = image.get_height()
+        self.image = pygame.transform.scale(image, (int(width*scale), int(height*scale)))  #redimensionne l'image
+        self.rect = self.image.get_rect()
+        self.rect.topleft = (x, y)
+        self.clicked = False  #pour savoir si le bouton a été cliqué
+    def draw(self):
+        """dessiner le bouton"""
+        action = False 
+        #récupérer la position de la souris
+        pos = pygame.mouse.get_pos()
+        if self.rect.collidepoint(pos): #est ce que la souris est sur le bouton
+            if pygame.mouse.get_pressed()[0] == 1 and self.clicked == False:    #0 = clic gauche
+                self.clicked = True
+                action = True
+                print("clic gauche")
+          
+        if pygame.mouse.get_pressed()[0] == 0:  #si le clic gauche est relaché
+            self.clicked = False
+
+        screen_menu.blit(self.image, (self.rect.x, self.rect.y))
+
+        return action 
+    
+start_bouton = Bouton(275, 100, image_start, 1)  #x, y, image, scale
+exit_bouton = Bouton(337, 450, image_exit, 0.4)  #x, y, image, scale
+
+
+=======
+<<<<<<< HEAD
+>>>>>>> d4b502f (bouton + menu)
+def ecran_menu():
+    """écran de menu"""
+    menu = True
+    while menu == True:
+        screen_menu.fill(BLEU)
+        texte_menu = texte.render("Puissance 4", 1, VERT)
+        screen_menu.blit(texte_menu, (250, 15))
+       
+        if start_bouton.draw() == True:  #si le bouton est cliqué(depuis action = True)
+            ecran_niveau()  #lance le niveau
+            ecran_jeu()
+            menu = False
+        if exit_bouton.draw() == True:
+            menu = False
+        
+         
+        for event in pygame.event.get():
+            if event.type == pygame.QUIT:
+                sys.exit()
+        pygame.display.update()
+
+<<<<<<< HEAD
+
+ecran_menu()
+=======
+ecran_menu()
+=======
 #charger les images (boutons)
 image_start = pygame.image.load("pngtree-the-apple-green-start-png-image_2255519.png").convert_alpha()
 image_exit = pygame.image.load("exit-button.png").convert_alpha()
@@ -312,3 +386,5 @@ def ecran_menu():
 
 
 ecran_menu()
+>>>>>>> 08d8df9 (boutons + menu (dossier smartAI = projet))
+>>>>>>> d4b502f (bouton + menu)

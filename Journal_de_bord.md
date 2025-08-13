@@ -58,7 +58,17 @@
 
 **12.06.2025**
 - recherche sur [alpha_beta_pruning](https://www.youtube.com/watch?v=A7AO152vy50)
+<<<<<<< HEAD
 
 https://www.google.com/search?q=image+bouton+exit+no+backround&client=firefox-b-d&sca_esv=2dfd597b30ca6995&udm=2&biw=1920&bih=919&ei=6YqbaNOjLq3Ci-gPjIOEiA0&ved=0ahUKEwiTvJWj9oWPAxUt4QIHHYwBAdEQ4dUDCBE&uact=5&oq=image+bouton+exit+no+backround&gs_lp=EgNpbWciHmltYWdlIGJvdXRvbiBleGl0IG5vIGJhY2tyb3VuZEj_HlDQA1igHXABeACQAQCYAWegAZ8HqgEEMTIuMbgBA8gBAPgBAZgCAKACAJgDAIgGAZIHAKAHyQSyBwC4BwDCBwDIBwA&sclient=img#vhid=EEFx0vKsfGLuXM&vssid=mosaic
 
 https://www.google.com/search?client=firefox-b-d&sca_esv=fa545b2fcd0b4c1a&udm=2&fbs=AIIjpHx4nJjfGojPVHhEACUHPiMQ_pbg5bWizQs3A_kIenjtcpTTqBUdyVgzq0c3_k8z34GCYOIq5wL9Dn59EPLMWMeSQxShYoP3rZgvCeKxXaSwGz05VKq2b9Rf5hx1JVzlaIPubrlNwzMnyHx5duFPJ4p9lSqJOZt5uo2NN16RUqES3saRr8A8dZO6-wFUO645VTdSgHR3Iqw3AyhN3XLXOUavi0wj8yKgjVfPn0j3eswMZPd_e7o&q=start+button+png&sa=X&ved=2ahUKEwiVwv6D34ePAxVk3gIHHXT2IlIQtKgLegQIEhAB&biw=1920&bih=919&dpr=1#vhid=hYbLiDSgweS6SM&vssid=mosaic
+=======
+<<<<<<< HEAD
+=======
+
+https://www.google.com/search?q=image+bouton+exit+no+backround&client=firefox-b-d&sca_esv=2dfd597b30ca6995&udm=2&biw=1920&bih=919&ei=6YqbaNOjLq3Ci-gPjIOEiA0&ved=0ahUKEwiTvJWj9oWPAxUt4QIHHYwBAdEQ4dUDCBE&uact=5&oq=image+bouton+exit+no+backround&gs_lp=EgNpbWciHmltYWdlIGJvdXRvbiBleGl0IG5vIGJhY2tyb3VuZEj_HlDQA1igHXABeACQAQCYAWegAZ8HqgEEMTIuMbgBA8gBAPgBAZgCAKACAJgDAIgGAZIHAKAHyQSyBwC4BwDCBwDIBwA&sclient=img#vhid=EEFx0vKsfGLuXM&vssid=mosaic
+
+https://www.google.com/search?client=firefox-b-d&sca_esv=fa545b2fcd0b4c1a&udm=2&fbs=AIIjpHx4nJjfGojPVHhEACUHPiMQ_pbg5bWizQs3A_kIenjtcpTTqBUdyVgzq0c3_k8z34GCYOIq5wL9Dn59EPLMWMeSQxShYoP3rZgvCeKxXaSwGz05VKq2b9Rf5hx1JVzlaIPubrlNwzMnyHx5duFPJ4p9lSqJOZt5uo2NN16RUqES3saRr8A8dZO6-wFUO645VTdSgHR3Iqw3AyhN3XLXOUavi0wj8yKgjVfPn0j3eswMZPd_e7o&q=start+button+png&sa=X&ved=2ahUKEwiVwv6D34ePAxVk3gIHHXT2IlIQtKgLegQIEhAB&biw=1920&bih=919&dpr=1#vhid=hYbLiDSgweS6SM&vssid=mosaic
+>>>>>>> 08d8df9 (boutons + menu (dossier smartAI = projet))
+>>>>>>> d4b502f (bouton + menu)

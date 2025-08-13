@@ -9,6 +9,7 @@ NOIR = (0, 0, 0)
 JAUNE = (255, 227, 34)
 ROUGE = (237, 0, 0)
 VERT = (22, 184, 78)
+BLANC = (255, 255, 255)
 
 pygame.init() 
 pygame.font.init()
@@ -21,9 +22,15 @@ hauteur = TAILLECARRE*(ROW_COUNT+1) #multiplie le carré par le nombre de lignes
 taille = (largeur, hauteur)
 screen = pygame.display.set_mode(taille)
 rayon = int(TAILLECARRE/2 - 5)
-texte = pygame.font.SysFont("monospace", 60)
-taille_menu = (900, 700) #taille de l'écran de menu
-screen_menu = pygame.display.set_mode(taille_menu) #écran de menu, 100x200 pixels
+texte = pygame.font.SysFont("monospace", 60) 
+texte_niveau = pygame.font.SysFont("monospace", 30)
+texte_puissance4 =pygame.font.SysFont("monospace", 80)
+#charger les images (boutons)
+image_start = pygame.image.load("pngtree-the-apple-green-start-png-image_2255519.png").convert_alpha()
+image_exit = pygame.image.load("exit-button.png").convert_alpha()
+image_niveau1 = pygame.image.load("niveau 1.png").convert_alpha()
+image_niveau2 = pygame.image.load("niveau 2.png").convert_alpha()
+image_niveau3 = pygame.image.load("niveau 3.png").convert_alpha()
 
 def create_board():
     """ créer une matrice 6x7"""
@@ -125,7 +132,32 @@ def draw_board(board):
     pygame.display.update()
             
 
+class Bouton:
+    """classe pour les boutons"""
+    def __init__(self, x, y, image, scale):
+        width = image.get_width()
+        height = image.get_height()
+        self.image = pygame.transform.scale(image, (int(width*scale), int(height*scale)))  #redimensionne l'image
+        self.rect = self.image.get_rect()
+        self.rect.topleft = (x, y)
+        self.clicked = False  #pour savoir si le bouton a été cliqué
+    def draw(self):
+        """dessiner le bouton"""
+        action = False #utilisation dans boucle principale
+        #récupérer la position de la souris
+        pos = pygame.mouse.get_pos()
+        if self.rect.collidepoint(pos): #est ce que la souris est sur le bouton
+            if pygame.mouse.get_pressed()[0] == 1 and self.clicked == False:    #0 = clic gauche
+                self.clicked = True
+                action = True #pour 
+                print("clic gauche")
+          
+            if pygame.mouse.get_pressed()[0] == 0:  #si le clic gauche est relaché
+                self.clicked = False
 
+        screen.blit(self.image, (self.rect.x, self.rect.y))
+
+        return action 
 
 
 
@@ -133,17 +165,43 @@ def draw_board(board):
 board = create_board()
 #quand la valeur est True le jeu stop
 game_over = True
-#chacun son tour
+
+niveau1_bouton = Bouton(0, 100, image_niveau1, 1)  #x, y, image, scale
+niveau2_bouton = Bouton(250, 100, image_niveau2, 1)  #x, y, image, scale
+niveau3_bouton = Bouton(500, 100, image_niveau3, 1)  #x, y, image, scale
+
 #choisir difficulté (niv.1 = JvsJ, niv.2 = random, niv.3 = un peu smart)
 def ecran_niveau():
     global niveau
     game_over = True
-    while True:
+    menu_niveau = True
+    while menu_niveau == True:
         while game_over: 
             for event in pygame.event.get():
                 if event.type == pygame.QUIT:
                     sys.exit()
-                
+
+            screen.fill(BLEU)
+            etiquette = texte_niveau.render("Choisissez le niveau de difficulté", 1, BLANC)
+            screen.blit(etiquette, (45, 15))    
+            
+            if niveau1_bouton.draw() == True: 
+                niveau = 1 
+                game_over = False
+                ecran_jeu()
+            if niveau2_bouton.draw() == True:
+                niveau = 2 
+                game_over = False   
+                ecran_jeu()  #lance le jeu
+            if niveau3_bouton.draw() == True:
+                niveau = 3 
+                game_over = False
+                ecran_jeu()
+ 
+            pygame.display.update() 
+            
+           
+            '''
             niveau = int(input("choisissez le niveau de difficulté (1-3): "))
             if niveau == 1:
                 game_over = False
@@ -153,7 +211,8 @@ def ecran_niveau():
                 game_over = False
             else:
                 print("entrez un nombre valide.")
-        return False 
+            '''
+       
 
       
 #boucle principale
@@ -254,54 +313,26 @@ def ecran_jeu():
                     print_board(board)
             if game_over:
                 pygame.time.wait(2000) #millisec
+                sys.exit()
 
-#charger les images (boutons)
-image_start = pygame.image.load("pngtree-the-apple-green-start-png-image_2255519.png").convert_alpha()
-image_exit = pygame.image.load("exit-button.png").convert_alpha()
 
-class Bouton:
-    """classe pour les boutons"""
-    def __init__(self, x, y, image, scale):
-        width = image.get_width()
-        height = image.get_height()
-        self.image = pygame.transform.scale(image, (int(width*scale), int(height*scale)))  #redimensionne l'image
-        self.rect = self.image.get_rect()
-        self.rect.topleft = (x, y)
-        self.clicked = False  #pour savoir si le bouton a été cliqué
-    def draw(self):
-        """dessiner le bouton"""
-        action = False 
-        #récupérer la position de la souris
-        pos = pygame.mouse.get_pos()
-        if self.rect.collidepoint(pos): #est ce que la souris est sur le bouton
-            if pygame.mouse.get_pressed()[0] == 1 and self.clicked == False:    #0 = clic gauche
-                self.clicked = True
-                action = True
-                print("clic gauche")
-          
-        if pygame.mouse.get_pressed()[0] == 0:  #si le clic gauche est relaché
-            self.clicked = False
 
-        screen_menu.blit(self.image, (self.rect.x, self.rect.y))
-
-        return action 
     
-start_bouton = Bouton(175, 200, image_start, 0.8)  #x, y, image, scale
-exit_bouton = Bouton(275, 450, image_exit, 0.4)  #x, y, image, scale
+start_bouton = Bouton(80, 300, image_start, 0.8)  #x, y, image, scale
+exit_bouton = Bouton(180, 550, image_exit, 0.4)  #x, y, image, scale
 
 
 def ecran_menu():
     """écran de menu"""
     menu = True
     while menu == True:
-        screen_menu.fill(BLEU)
-        texte_menu = texte.render("Puissance 4", 1, VERT)
-        screen_menu.blit(texte_menu, (250, 15))
+        screen.fill(BLEU)
+        texte_menu = texte.render("Puissance 4", 1, BLANC)
+        screen.blit(texte_menu, (160, 100))
        
         if start_bouton.draw() == True:  #si le bouton est cliqué(depuis action = True)
-            
-            ecran_niveau()  #lance le niveau
-            ecran_jeu()
+            ecran_niveau()  #lance l'ecran niveau
+         
         if exit_bouton.draw() == True:
             menu = False
         
@@ -313,3 +344,4 @@ def ecran_menu():
 
 
 ecran_menu()
+
