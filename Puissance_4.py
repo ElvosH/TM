@@ -130,7 +130,105 @@ def draw_board(board):
                 pygame.draw.circle(screen, ROUGE, (int(c*TAILLECARRE+TAILLECARRE/2), hauteur-int(i*TAILLECARRE+TAILLECARRE/2)), rayon )
             
     pygame.display.update()
-            
+
+def evaluate_window(window, piece):
+    score = 0
+    opp_piece = 1 if piece == 2 else 2
+
+    if window.count(piece) == 4:
+        score += 100
+    elif window.count(piece) == 3 and window.count(0) == 1:
+        score += 10
+    elif window.count(piece) == 2 and window.count(0) == 2:
+        score += 5
+
+    if window.count(opp_piece) == 3 and window.count(0) == 1:
+        score -= 80
+
+    return score
+
+def score_position(board, piece):
+    score = 0
+
+    ## Score centre (préférer jouer au centre)
+    center_array = [int(i) for i in list(board[:, COLUMN_COUNT//2])]
+    center_count = center_array.count(piece)
+    score += center_count * 6
+
+    ## Score horizontal
+    for r in range(ROW_COUNT):
+        row_array = [int(i) for i in list(board[r,:])]
+        for c in range(COLUMN_COUNT-3):
+            window = row_array[c:c+4]
+            score += evaluate_window(window, piece)
+
+    ## Score vertical
+    for c in range(COLUMN_COUNT):
+        col_array = [int(i) for i in list(board[:,c])]
+        for r in range(ROW_COUNT-3):
+            window = col_array[r:r+4]
+            score += evaluate_window(window, piece)
+
+    ## Score diagonale
+    for r in range(ROW_COUNT-3):
+        for c in range(COLUMN_COUNT-3):
+            window = [board[r+i][c+i] for i in range(4)]
+            score += evaluate_window(window, piece)
+
+    for r in range(ROW_COUNT-3):
+        for c in range(COLUMN_COUNT-3):
+            window = [board[r+3-i][c+i] for i in range(4)]
+            score += evaluate_window(window, piece)
+
+    return score
+
+def get_valid_locations(board):
+    valid_locations = []
+    for col in range(COLUMN_COUNT):
+        if is_valid_location(board, col):
+            valid_locations.append(col)
+    return valid_locations
+
+def minimax(board, depth, maximizingPlayer):
+    valid_locations = get_valid_locations(board)
+    is_terminal = winning_move(board, 1) or winning_move(board, 2) or len(valid_locations) == 0
+
+    if depth == 0 or is_terminal:
+        if is_terminal:
+            if winning_move(board, 2): # ordinateur gagne
+                return (None, 100000000000000)
+            elif winning_move(board, 1): # joueur gagne
+                return (None, -10000000000000)
+            else: # égalité
+                return (None, 0)
+        else: # profondeur atteinte → on renvoie score heuristique
+            return (None, score_position(board, 2))
+
+    if maximizingPlayer:
+        value = -math.inf
+        best_col = random.choice(valid_locations)
+        for col in valid_locations:
+            row = get_next_open_row(board, col)
+            temp_board = board.copy()
+            drop_piece(temp_board, row, col, 2) # IA joue
+            new_score = minimax(temp_board, depth-1, False)[1]
+            if new_score > value:
+                value = new_score
+                best_col = col
+        return best_col, value
+
+    else: # minimizingPlayer (le joueur humain)
+        value = math.inf
+        best_col = random.choice(valid_locations)
+        for col in valid_locations:
+            row = get_next_open_row(board, col)
+            temp_board = board.copy()
+            drop_piece(temp_board, row, col, 1) # humain joue
+            new_score = minimax(temp_board, depth-1, True)[1]
+            if new_score < value:
+                value = new_score
+                best_col = col
+        return best_col, value
 
 class Bouton:
     """classe pour les boutons"""
@@ -172,7 +270,7 @@ niveau3_bouton = Bouton(500, 100, image_niveau3, 1)  #x, y, image, scale
 
 #choisir difficulté (niv.1 = JvsJ, niv.2 = random, niv.3 = un peu smart)
 def ecran_niveau():
-    global niveau
+    global niveau, game_over
     game_over = True
     menu_niveau = True
     while menu_niveau == True:
@@ -218,7 +316,6 @@ def ecran_niveau():
 #boucle principale
 def ecran_jeu():
     """fonction principale du jeu"""
-    global game_over, turn, niveau #CHATGPT fonction globale
     game_over = False
     turn = 0
     while not game_over:
@@ -237,6 +334,7 @@ def ecran_jeu():
                     pygame.draw.circle(screen, ROUGE, (posx, int(TAILLECARRE/2)), rayon)
             pygame.display.update()
 
+       
             if event.type == pygame.MOUSEBUTTONDOWN: 
                 pygame.draw.rect(screen, NOIR, (0,0, largeur, TAILLECARRE))
                         #demander au joueur 1 input
@@ -290,9 +388,9 @@ def ecran_jeu():
             
                 
                 if niveau == 2:
-                    col = random_piece(board)
+                    col = smartAI(board)
                 elif niveau == 3:
-                    col = smartAI(board)     # on veut que modifier la colone car c'est ou elle va jouer la pièce
+                    col, minimax_score = minimax(board, 4, True)    # on veut que modifier la colone car c'est ou elle va jouer la pièce
                 
                 if is_valid_location(board, col):
                     row = get_next_open_row(board, col)
@@ -332,6 +430,8 @@ def ecran_menu():
        
         if start_bouton.draw() == True:  #si le bouton est cliqué(depuis action = True)
             ecran_niveau()  #lance l'ecran niveau
+
+            
          
         if exit_bouton.draw() == True:
             menu = False
