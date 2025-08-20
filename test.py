@@ -131,7 +131,6 @@ def draw_board(board):
             
     pygame.display.update()
 
-#CHATGPT : fonction pour évaluer les fenêtres de 4 pièces
 def evaluate_window(window, piece):
     score = 0
     opp_piece = 1 if piece == 2 else 2
@@ -148,7 +147,6 @@ def evaluate_window(window, piece):
 
     return score
 
-#CHATGPT : fonction pour évaluer la position du plateau
 def score_position(board, piece):
     score = 0
 
@@ -184,7 +182,6 @@ def score_position(board, piece):
 
     return score
 
-#CHATGPT : fonction pour vérifier les emplacements valides
 def get_valid_locations(board):
     valid_locations = []
     for col in range(COLUMN_COUNT):
@@ -192,7 +189,6 @@ def get_valid_locations(board):
             valid_locations.append(col)
     return valid_locations
 
-#CHATGPT : fonction minimax pour l'IA
 def minimax(board, depth, maximizingPlayer):
     valid_locations = get_valid_locations(board)
     is_terminal = winning_move(board, 1) or winning_move(board, 2) or len(valid_locations) == 0
@@ -267,11 +263,10 @@ class Bouton:
 board = create_board()
 #quand la valeur est True le jeu stop
 game_over = True
-niveau1_bouton = Bouton(0, 100, image_niveau1, 1)  #x, y, image, taille
-niveau2_bouton = Bouton(250, 100, image_niveau2, 1)  #x, y, image, taille
-niveau3_bouton = Bouton(500, 100, image_niveau3, 1)  #x, y, image, taille
-start_bouton = Bouton(80, 300, image_start, 0.8)  #x, y, image, scale
-exit_bouton = Bouton(180, 550, image_exit, 0.4)  #x, y, image, scale
+
+niveau1_bouton = Bouton(0, 100, image_niveau1, 1)  #x, y, image, scale
+niveau2_bouton = Bouton(250, 100, image_niveau2, 1)  #x, y, image, scale
+niveau3_bouton = Bouton(500, 100, image_niveau3, 1)  #x, y, image, scale
 
 #choisir difficulté (niv.1 = JvsJ, niv.2 = random, niv.3 = un peu smart)
 def ecran_niveau():
@@ -419,6 +414,12 @@ def ecran_jeu():
                 sys.exit()
 
 
+
+    
+start_bouton = Bouton(80, 300, image_start, 0.8)  #x, y, image, scale
+exit_bouton = Bouton(180, 550, image_exit, 0.4)  #x, y, image, scale
+
+
 def ecran_menu():
     """écran de menu"""
     menu = True
@@ -429,12 +430,18 @@ def ecran_menu():
        
         if start_bouton.draw() == True:  #si le bouton est cliqué(depuis action = True)
             ecran_niveau()  #lance l'ecran niveau
+
+            
+         
         if exit_bouton.draw() == True:
             menu = False
+        
+         
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
                 sys.exit()
         pygame.display.update()
+
 
 ecran_menu()
 
