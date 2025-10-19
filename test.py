@@ -26,47 +26,11 @@ texte = pygame.font.SysFont("monospace", 60)
 texte_niveau = pygame.font.SysFont("monospace", 30)
 texte_puissance4 =pygame.font.SysFont("monospace", 80)
 #charger les images (boutons)
-image_start = pygame.image.load("Startbutton.png").convert_alpha()
+image_start = pygame.image.load("pngtree-the-apple-green-start-png-image_2255519.png").convert_alpha()
 image_exit = pygame.image.load("exit-button.png").convert_alpha()
 image_niveau1 = pygame.image.load("niveau 1.png").convert_alpha()
 image_niveau2 = pygame.image.load("niveau 2.png").convert_alpha()
 image_niveau3 = pygame.image.load("niveau 3.png").convert_alpha()
-
-Joueur1 = 1
-Joueur2 = 2 
-class Bouton:
-    """classe pour les boutons"""
-    def __init__(self, x, y, image, scale):
-        """initialise les boutons"""
-        width = image.get_width()
-        height = image.get_height()
-        self.image = pygame.transform.scale(image, (int(width*scale), int(height*scale)))  #redimensionne l'image
-        self.rect = self.image.get_rect()
-        self.rect.topleft = (x, y)
-        self.clicked = False  #pour savoir si le bouton a été cliqué
-    def action_button(self): #changer 11.
-        """regarde si la souris est au dessus du bouton, si appuyé retourne TRUE"""
-        action = False #utilisation dans boucle principale
-        #récupérer la position de la souris
-        pos = pygame.mouse.get_pos()
-        if self.rect.collidepoint(pos): #est ce que la souris est sur le bouton
-            if pygame.mouse.get_pressed()[0] == 1 and self.clicked == False:    #0 = clic gauche
-                self.clicked = True
-                action = True #pour activer la fonction qui suit.
-                #print("clic gauche")
-          
-            if pygame.mouse.get_pressed()[0] == 0:  #si le clic gauche est relaché
-                self.clicked = False
-
-        screen.blit(self.image, (self.rect.x, self.rect.y))
-
-        return action 
-    
-niveau1_bouton = Bouton(0, 100, image_niveau1, 1)  #x, y, image, taille
-niveau2_bouton = Bouton(250, 100, image_niveau2, 1)  #x, y, image, taille
-niveau3_bouton = Bouton(500, 100, image_niveau3, 1)  #x, y, image, taille
-start_bouton = Bouton(80, 300, image_start, 0.8)  #x, y, image, scale
-exit_bouton = Bouton(180, 550, image_exit, 0.2)  #x, y, image, scale
 
 def create_board():
     """ créer une matrice 6x7"""
@@ -75,29 +39,28 @@ def create_board():
 
 
 def drop_piece(board, row, col, piece):
-    """placer la piece dans le tableau"""
+    """placer la piece dans le tableau, comme .append"""
     board[row][col] = piece 
 
 def egalite(board):
-    """si toute la ligne du haut est complète = égalité"""
+    """fonction pour savoir si toute la ligne du haut est complète = égalité"""
     return np.all(board[ROW_COUNT-1] != 0)
     
 def is_valid_location(board, col):
-    """savoir si la colonne est remplie en testant la ligne du haut"""
+    """fonction pour savoir si la colonne est remplie"""
     return board[ROW_COUNT-1][col] == 0
 
 def get_next_open_row(board, col):
-    """savoir si la case dans la grille est vide, si c'est vide on peut jouer"""
     for i in range(ROW_COUNT):
         if board[i][col] == 0:
             return i 
 
 def print_board(board):
-    """imprimer le tableau dans terminal. inversé haut-bas car défaut np position 0 = haut-gauche"""
+    """fonction pour imprimer le tableau dans terminal. inversé haut-bas car défaut np position 0 = haut-gauche"""
     print(np.flip(board, 0))    #haut gauche = 0, on le flip contre le bas bas gauche
 
-def winning_condition(board, piece):
-    """tester des fenetres de 4 pièces dans toutes les directions dans le tableau, si 4 pions aligné d'une meme pièce (1 ou 2) retourner True pour arreter le jeu"""
+def winning_move(board, piece):
+    """fonction pour toutes les conditions de victoire"""
     #tester horizontale
     for c in range(COLUMN_COUNT-3):     #enlève 3 car on ne peut pas commencer avec c sur la quatrième colone 0-3
         for i in range(ROW_COUNT):
@@ -117,52 +80,57 @@ def winning_condition(board, piece):
     for c in range(COLUMN_COUNT-3):
         for i in range(3, ROW_COUNT):
             if board[i][c] == piece and board[i-1][c+1] == piece and board[i-2][c+2] == piece and board[i-3][c+3] == piece: #descend de ligne, avance en colone [i-1]
-                return True
+                return True 
 
-def random_colonne(board):
-    """retourne aléatoirement une colonne du tableau en s'assurant qu'il n'y ait pas déjà une pièce à l'endroit choisi ( 0 --> 6 ), sera joué par l'ordinateur"""
+def random_piece(board):
+    """definir les coups aléatoire de l'ordinateur"""
     pygame.time.wait(200) 
     while True:
         col = random.randint(0, 6)
         if is_valid_location(board, col):
             return col
-                                           
+                                            
 def smartAI(board): 
-    """IA : Teste s'il peut gagner ou bloquer le joueur humain sinon joue aléatoirement. Le teste se fait sur un tableau temporaire et non sur lequel on joue. retourne la colonne"""
+    """fonction qui teste si il peut gagner ou si il peut bloquer le joueur, le test se fait sur un tableau temporaire"""
     pygame.time.wait(200) 
-    for i in range(2): #alterne entre 0 et 1, pour faire tourner la boucle 2x avec différents paramètres 
-        if i == 0:
-            JoueurX = Joueur2
-        else:
-            JoueurX = Joueur1
-        for col in range(COLUMN_COUNT): #test gagner et bloquer
-            if is_valid_location(board, col):
-                row = get_next_open_row(board, col)
-                temp_board = board.copy() #tableau temporaire créé           #CHATGPT utilisé pour cette ligne (question : comment dupliquer un board au milieu d'un jeu (python), .copy grâce a numpy, board = np.copy())
-                print(temp_board)
-                drop_piece(temp_board, row, col, JoueurX) #on drop une pièce dans le tableau temporaire
-                if winning_condition(temp_board, JoueurX): #on teste dans le tableau temporaire, si winning_move, on drop piece dans le vrai tableau. Si non, on teste les boucles en bas
-                    return col  #on drop sur cette colonne 
-                
-    return random_colonne(board) #Si aucune boucle "activé" on joue aléatoirement
-#changer 7.
+    #test gagner
+    for col in range(COLUMN_COUNT):
+        if is_valid_location(board, col):
+            row = get_next_open_row(board, col)
+            temp_board = board.copy() #tableau temporaire créé #CHATGPT utilisé pour cette ligne (question : comment dupliquer un board au milieu d'un jeu (python), .copy grâce a numpy, board = np.copy())
+            print(temp_board)
+            drop_piece(temp_board, row, col, 2) #on drop une pièce dans le tableau temporaire
+            if winning_move(temp_board, 2): #on teste dans le tableau temporaire, si winning_move, on drop piece dans le vrai tableau. Si non, on teste les boucles en bas
+                return col  #on drop sur cette colonne 
+    #test bloquer    
+    for col in range(COLUMN_COUNT):
+        if is_valid_location(board, col):
+            row = get_next_open_row(board, col)
+            temp_board = board.copy() #CHATGPT cette ligne <<
+            print(temp_board)
+            drop_piece(temp_board, row, col, 1)
+            if winning_move(temp_board, 1):
+                return col
+    #si rien random
+    return random_piece(board) #Si aucune boucle "activé" on joue aléatoirement
+
+
 def draw_board(board):
-    """dessiner le plateau de jeu (modélisation)"""
+    """dessiner le plateau de jeu (modéliser)"""
     for c in range(COLUMN_COUNT):
         for i in range(ROW_COUNT):
-            pygame.draw.rect(screen, BLEU, (c*TAILLECARRE, i*TAILLECARRE+TAILLECARRE, TAILLECARRE, TAILLECARRE)) #(x, y) et 2 dernier TAILLECARRE = taille du rectangle 100pxX100px 
-            pygame.draw.circle(screen, NOIR, (int(c*TAILLECARRE+TAILLECARRE/2), int(i*TAILLECARRE+TAILLECARRE+TAILLECARRE/2)), rayon ) #int cause pygame str| 
+            pygame.draw.rect(screen, BLEU, (c*TAILLECARRE, i*TAILLECARRE+TAILLECARRE, TAILLECARRE, TAILLECARRE))
+            pygame.draw.circle(screen, NOIR, (int(c*TAILLECARRE+TAILLECARRE/2), int(i*TAILLECARRE+TAILLECARRE+TAILLECARRE/2)), rayon ) #/2 car rayon, int cause pygame str
         
     for c in range(COLUMN_COUNT):
         for i in range(ROW_COUNT):
             if board[i][c] == 1:
-                pygame.draw.circle(screen, JAUNE, (int(c*TAILLECARRE+TAILLECARRE/2), hauteur-int(i*TAILLECARRE+TAILLECARRE/2)), rayon ) #hauteur car ligne 0 est en bas du plateau mais y=0 est en haut
+                pygame.draw.circle(screen, JAUNE, (int(c*TAILLECARRE+TAILLECARRE/2), hauteur-int(i*TAILLECARRE+TAILLECARRE/2)), rayon )
             elif board[i][c] == 2:
-                pygame.draw.circle(screen, ROUGE, (int(c*TAILLECARRE+TAILLECARRE/2), hauteur-int(i*TAILLECARRE+TAILLECARRE/2)), rayon ) #(x, y) ajoute les pixels TAILLECARRE + la moitié pour centrer la pièce
+                pygame.draw.circle(screen, ROUGE, (int(c*TAILLECARRE+TAILLECARRE/2), hauteur-int(i*TAILLECARRE+TAILLECARRE/2)), rayon )
             
     pygame.display.update()
 
-#CHATGPT : fonction pour évaluer les fenêtres de 4 pièces
 def evaluate_window(window, piece):
     score = 0
     opp_piece = 1 if piece == 2 else 2
@@ -179,7 +147,6 @@ def evaluate_window(window, piece):
 
     return score
 
-#CHATGPT : fonction pour évaluer la position du plateau
 def score_position(board, piece):
     score = 0
 
@@ -190,7 +157,7 @@ def score_position(board, piece):
 
     ## Score horizontal
     for r in range(ROW_COUNT):
-        row_array = [int(i) for i in list(board[r,:])] #comprendre 8.
+        row_array = [int(i) for i in list(board[r,:])]
         for c in range(COLUMN_COUNT-3):
             window = row_array[c:c+4]
             score += evaluate_window(window, piece)
@@ -215,7 +182,6 @@ def score_position(board, piece):
 
     return score
 
-#CHATGPT : fonction pour vérifier les emplacements valides
 def get_valid_locations(board):
     valid_locations = []
     for col in range(COLUMN_COUNT):
@@ -223,16 +189,15 @@ def get_valid_locations(board):
             valid_locations.append(col)
     return valid_locations
 
-#CHATGPT : fonction minimax pour l'IA
 def minimax(board, depth, maximizingPlayer):
     valid_locations = get_valid_locations(board)
-    is_terminal = winning_condition(board, 1) or winning_condition(board, 2) or len(valid_locations) == 0
+    is_terminal = winning_move(board, 1) or winning_move(board, 2) or len(valid_locations) == 0
 
     if depth == 0 or is_terminal:
         if is_terminal:
-            if winning_condition(board, 2): # ordinateur gagne
+            if winning_move(board, 2): # ordinateur gagne
                 return (None, 100000000000000)
-            elif winning_condition(board, 1): # joueur gagne
+            elif winning_move(board, 1): # joueur gagne
                 return (None, -10000000000000)
             else: # égalité
                 return (None, 0)
@@ -241,7 +206,7 @@ def minimax(board, depth, maximizingPlayer):
 
     if maximizingPlayer:
         value = -math.inf
-        best_col = random.choice(valid_locations) #pk random 9.
+        best_col = random.choice(valid_locations)
         for col in valid_locations:
             row = get_next_open_row(board, col)
             temp_board = board.copy()
@@ -265,13 +230,46 @@ def minimax(board, depth, maximizingPlayer):
                 best_col = col
         return best_col, value
 
-board = create_board() 
-game_over = True  #quand la valeur est True le jeu s'arrête
+class Bouton:
+    """classe pour les boutons"""
+    def __init__(self, x, y, image, scale):
+        width = image.get_width()
+        height = image.get_height()
+        self.image = pygame.transform.scale(image, (int(width*scale), int(height*scale)))  #redimensionne l'image
+        self.rect = self.image.get_rect()
+        self.rect.topleft = (x, y)
+        self.clicked = False  #pour savoir si le bouton a été cliqué
+    def draw(self):
+        """dessiner le bouton"""
+        action = False #utilisation dans boucle principale
+        #récupérer la position de la souris
+        pos = pygame.mouse.get_pos()
+        if self.rect.collidepoint(pos): #est ce que la souris est sur le bouton
+            if pygame.mouse.get_pressed()[0] == 1 and self.clicked == False:    #0 = clic gauche
+                self.clicked = True
+                action = True #pour 
+                print("clic gauche")
+          
+            if pygame.mouse.get_pressed()[0] == 0:  #si le clic gauche est relaché
+                self.clicked = False
 
-#choisir difficulté (niv.1 = JvsJ, niv.2 = un peu smart, niv.3 = minimax)
+        screen.blit(self.image, (self.rect.x, self.rect.y))
+
+        return action 
+
+
+
+
+board = create_board()
+#quand la valeur est True le jeu stop
+game_over = True
+
+niveau1_bouton = Bouton(0, 100, image_niveau1, 1)  #x, y, image, scale
+niveau2_bouton = Bouton(250, 100, image_niveau2, 1)  #x, y, image, scale
+niveau3_bouton = Bouton(500, 100, image_niveau3, 1)  #x, y, image, scale
+
+#choisir difficulté (niv.1 = JvsJ, niv.2 = random, niv.3 = un peu smart)
 def ecran_niveau():
-    """page pour choisir les niveau"""
-    pygame.display.set_caption("Niveau")
     global niveau, game_over
     game_over = True
     menu_niveau = True
@@ -283,23 +281,17 @@ def ecran_niveau():
 
             screen.fill(BLEU)
             etiquette = texte_niveau.render("Choisissez le niveau de difficulté", 1, BLANC)
-            etiquette1 = texte_niveau.render("JvsJ", 1, VERT)
-            etiquette2 = texte_niveau.render("JvsIA(facile)", 1, JAUNE)
-            etiquette3 = texte_niveau.render("JvsIA(dur)", 1, ROUGE)
             screen.blit(etiquette, (45, 15))    
-            screen.blit(etiquette1, (60, 300)) 
-            screen.blit(etiquette2, (230, 300)) 
-            screen.blit(etiquette3, (510, 300))
-
-            if niveau1_bouton.action_button() == True: 
+            
+            if niveau1_bouton.draw() == True: 
                 niveau = 1 
                 game_over = False
                 ecran_jeu()
-            if niveau2_bouton.action_button() == True:
+            if niveau2_bouton.draw() == True:
                 niveau = 2 
                 game_over = False   
                 ecran_jeu()  #lance le jeu
-            if niveau3_bouton.action_button() == True:
+            if niveau3_bouton.draw() == True:
                 niveau = 3 
                 game_over = False
                 ecran_jeu()
@@ -318,15 +310,16 @@ def ecran_niveau():
             else:
                 print("entrez un nombre valide.")
             '''
+       
+
       
 #boucle principale
 def ecran_jeu():
-    """page pour jouer : boucle principale du jeu"""
+    """fonction principale du jeu"""
     game_over = False
     turn = 0
     while not game_over:
         draw_board(board)
-        pygame.display.set_caption("Puissance 4")
         pygame.display.update() #rafraichir le dessin
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
@@ -354,9 +347,9 @@ def ecran_jeu():
 
                     if is_valid_location(board, col):
                         row = get_next_open_row(board, col)
-                        drop_piece(board, row, col, Joueur1)
+                        drop_piece(board, row, col, 1)
 
-                        if winning_condition(board, 1):
+                        if winning_move(board, 1):
                             etiquette = texte.render("vous avez gagné !!", 1 , VERT)
                             screen.blit(etiquette, (12,15))
                             game_over = True 
@@ -367,18 +360,17 @@ def ecran_jeu():
                             game_over = True
                     
                     
-                        turn = Joueur1
+                        turn = 1
                         draw_board(board)
-                        print_board(board)
                 else:
                     posx = event.pos[0]
                     col = int(math.floor(posx/TAILLECARRE))
 
                     if is_valid_location(board, col):
                         row = get_next_open_row(board, col)
-                        drop_piece(board, row, col, Joueur2)           
+                        drop_piece(board, row, col, 2)           
 
-                        if winning_condition(board, 2):
+                        if winning_move(board, 2):
                             etiquette = texte.render("Joueur 2 a gagné !!", 1 , VERT)
                             screen.blit(etiquette, (12,15))
                             game_over = True
@@ -390,7 +382,6 @@ def ecran_jeu():
                     
                         turn = 0     
                         draw_board(board) 
-                        print_board(board)
 
                 #tour ordinateur
             if turn == 1 and not game_over and niveau > 1: #not game over pour qu'il joue pas après joueur gagner            
@@ -399,13 +390,13 @@ def ecran_jeu():
                 if niveau == 2:
                     col = smartAI(board)
                 elif niveau == 3:
-                    col, _ = minimax(board, 4, True)   #changer 13. # on veut que modifier la colone car c'est ou elle va jouer la pièce, _ = passer la valeur
+                    col, minimax_score = minimax(board, 4, True)    # on veut que modifier la colone car c'est ou elle va jouer la pièce
                 
                 if is_valid_location(board, col):
                     row = get_next_open_row(board, col)
-                    drop_piece(board, row, col, Joueur2)
+                    drop_piece(board, row, col, 2)
                     
-                    if winning_condition(board, 2):
+                    if winning_move(board, 2):
                         etiquette = texte.render("ordinateur a gagné !!", 1 , VERT)
                         screen.blit(etiquette, (12,15))
                         game_over = True 
@@ -418,29 +409,39 @@ def ecran_jeu():
                     turn = 0
                     draw_board(board)
                     print_board(board)
-            
             if game_over:
                 pygame.time.wait(2000) #millisec
                 sys.exit()
 
 
+
+    
+start_bouton = Bouton(80, 300, image_start, 0.8)  #x, y, image, scale
+exit_bouton = Bouton(180, 550, image_exit, 0.4)  #x, y, image, scale
+
+
 def ecran_menu():
-    """page de menu cliquer jouer ou quitter"""
+    """écran de menu"""
     menu = True
     while menu == True:
         screen.fill(BLEU)
         texte_menu = texte.render("Puissance 4", 1, BLANC)
         screen.blit(texte_menu, (160, 100))
-        pygame.display.set_caption("Menu")
-
-        if start_bouton.action_button() == True:  #si le bouton est cliqué(depuis action = True)
+       
+        if start_bouton.draw() == True:  #si le bouton est cliqué(depuis action = True)
             ecran_niveau()  #lance l'ecran niveau
-        if exit_bouton.action_button() == True:
+
+            
+         
+        if exit_bouton.draw() == True:
             menu = False
+        
+         
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
                 sys.exit()
         pygame.display.update()
+
 
 ecran_menu()
 
