@@ -54,16 +54,55 @@
 - commencer un algorithme plus intelligent (gagner, bloquer le joueur)
 
 **11.06.2025**
-- finit l'algorithme plus intelligent
+- finit de faire l'algorithme plus intelligent
 
 **12.06.2025**
 - recherche sur [alpha_beta_pruning](https://www.youtube.com/watch?v=A7AO152vy50)
 
 **14.07.2025**
+- recherche sur "comment faire un menu"
 
+**17.07.2025**
+- commencer le menu
 
+**18.07.2025**
+- continuer le menu
 
+**25.07.2025**
+- ajout des boutons et du texte sur le menu
 
-https://www.pngkey.com/maxpic/u2q8y3o0i1a9u2r5/
-https://www.vectorstock.com/royalty-free-vector/in-paper-sticker-style-exit-vector-11639116
-https://www.vectorstock.com/royalty-free-vector/1-2-3-gold-label-vector-3961426
+**26.07.2025**
+- Menu terminé
+
+**30.07.2025**
+- commencement du travail écrit
+
+**10.08.2025**
+- recherche sur [minimax](https://www.youtube.com/watch?v=5y2a0Zhgq0U)
+
+**19.08.2025**
+- implémentation de minimax + travail écrit
+
+**28.08.2025**
+- continuer travail écrit
+
+**29.08.2025**
+- continuer travail écrit 
+
+**01.09.2025**
+- première version finale du travail écrit
+
+**20.09.2025**
+- correction des commentaires du prof
+
+**21.09.2025**
+- documentation des fonctions + correction du code
+
+**10.10.2025**
+- correction commentaires du prof dans travail écrit
+
+**11.10.2025**
+- correction commentaires du prof dans travail écrit
+
+**20.10.2025**
+- impression du travail écrit
