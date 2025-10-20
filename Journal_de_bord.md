@@ -59,10 +59,11 @@
 **12.06.2025**
 - recherche sur [alpha_beta_pruning](https://www.youtube.com/watch?v=A7AO152vy50)
 
+**14.07.2025**
 
-https://www.google.com/search?client=firefox-b-d&sca_esv=a45e90ee3e925b06&channel=entpr&udm=2&fbs=AIIjpHx4nJjfGojPVHhEACUHPiMQ_pbg5bWizQs3A_kIenjtco10p_lIIOqEDys1QLF7R3ETuyep9gP_Nbe6WG8S9icleuah2rIASkptjFaOdlmB2QoR3HANePnq1lpFlWIFC6rYBP4xHuDprasMjj5D8d1YEGHv1NDR9v1xwNokIJE1vYyDi-lOcUET2_ggBij5s7WS4eVWzRDK7Fo4Uh0wSUdsiMBC0lAU2dbE1BHIKTmHMM1cepM&q=exit+button&sa=X&ved=2ahUKEwjq-suVibGQAxUm-AIHHe1ZKOkQtKgLegQIFBAB&biw=1280&bih=613&dpr=1.5#imgrc=p59cMntkI8SiDM&imgdii=4rAedFZnbn3F3M
+
+
 
 https://www.pngkey.com/maxpic/u2q8y3o0i1a9u2r5/
-
-
 https://www.vectorstock.com/royalty-free-vector/in-paper-sticker-style-exit-vector-11639116
+https://www.vectorstock.com/royalty-free-vector/1-2-3-gold-label-vector-3961426
